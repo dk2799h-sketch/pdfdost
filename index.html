@@ -42,18 +42,32 @@
 
         .hero { text-align: center; padding: 40px 20px; background: #fff; }
         
-        /* Landscape Optimization */
+        /* Grid Layout Fix - 4 Columns & 6 Rows approx */
         .container { max-width: 1200px; margin: 20px auto; padding: 0 20px; flex: 1; }
-        .tools-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; }
         
+        .tools-grid { 
+            display: grid; 
+            grid-template-columns: repeat(4, 1fr); /* 4 Columns on desktop */
+            gap: 15px; 
+        }
+        
+        /* Responsive: Tablet and Mobile adjust */
+        @media (max-width: 900px) {
+            .tools-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+        @media (max-width: 600px) {
+            .tools-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
         .tool-card { background: #fff; padding: 20px; border-radius: 12px; text-align: center; border: 1px solid #eee; cursor: pointer; transition: 0.3s; }
         .tool-card:hover { transform: translateY(-5px); border-color: var(--primary-color); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        .tool-card h3 { font-size: 1rem; margin-top: 10px; }
+        .tool-card p { font-size: 0.8rem; color: #777; }
         .tool-icon { font-size: 30px; margin-bottom: 10px; display: block; font-style: normal; }
         
         .work-area { display: none; background: #fff; padding: 30px; border-radius: 20px; text-align: center; border: 2px dashed var(--primary-color); max-width: 600px; margin: 0 auto; }
         .btn { background: var(--primary-color); color: #fff; padding: 12px 25px; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; margin: 10px 5px; }
         
-        /* Footer Styling */
         footer {
             background: #fff;
             text-align: center;
@@ -62,12 +76,7 @@
             border-top: 1px solid #eee;
         }
         .footer-name { font-weight: 800; color: #333; margin-bottom: 5px; }
-        .footer-link { 
-            color: var(--primary-color); 
-            text-decoration: none; 
-            font-weight: 600; 
-            font-size: 0.95rem;
-        }
+        .footer-link { color: var(--primary-color); text-decoration: none; font-weight: 600; font-size: 0.95rem; }
         .footer-link:hover { text-decoration: underline; }
 
         input, select, textarea { display: block; margin: 15px auto; padding: 10px; width: 100%; max-width: 300px; border: 1px solid #ddd; border-radius: 5px; }
