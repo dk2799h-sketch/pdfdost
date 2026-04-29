@@ -18,14 +18,13 @@
     <style>
         :root { --primary-color: #e5322d; --bg-color: #f8f9fa; --card-bg: #ffffff; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background-color: var(--bg-color); color: #333; line-height: 1.6; }
+        body { background-color: var(--bg-color); color: #333; line-height: 1.6; display: flex; flex-direction: column; min-height: 100vh; }
         
-        /* लोगो को सेंटर करने और हेडर को सुंदर बनाने के लिए बदलाव */
         header { 
             background: #fff; 
             padding: 1.5rem 5%; 
             display: flex; 
-            justify-content: center; /* लोगो को बीच में लाने के लिए */
+            justify-content: center; 
             align-items: center; 
             box-shadow: 0 2px 10px rgba(0,0,0,0.05); 
             position: sticky; 
@@ -34,7 +33,7 @@
         }
         
         .logo { 
-            font-size: 2.2rem; /* फॉन्ट साइज बड़ा किया गया */
+            font-size: 2.2rem; 
             font-weight: 800; 
             color: var(--primary-color); 
             text-decoration: none; 
@@ -42,18 +41,30 @@
         }
 
         .hero { text-align: center; padding: 40px 20px; background: #fff; }
-        .container { max-width: 1200px; margin: 20px auto; padding: 0 20px; }
+        .container { max-width: 1200px; margin: 20px auto; padding: 0 20px; flex: 1; }
         .tools-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; }
         .tool-card { background: #fff; padding: 20px; border-radius: 12px; text-align: center; border: 1px solid #eee; cursor: pointer; transition: 0.3s; }
         .tool-card:hover { transform: translateY(-5px); border-color: var(--primary-color); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
-        .tool-icon { font-size: 30px; margin-bottom: 10px; display: block; font-style: normal; }
+        
         .work-area { display: none; background: #fff; padding: 30px; border-radius: 20px; text-align: center; border: 2px dashed var(--primary-color); max-width: 600px; margin: 0 auto; }
         .btn { background: var(--primary-color); color: #fff; padding: 12px 25px; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; margin: 10px 5px; }
+        
         input, select, textarea { display: block; margin: 15px auto; padding: 10px; width: 100%; max-width: 300px; border: 1px solid #ddd; border-radius: 5px; }
-        textarea { height: 150px; font-family: monospace; font-size: 12px; }
-        #status-msg { margin-top:15px; font-weight:bold; }
-        .edit-inputs { display: flex; gap: 5px; justify-content: center; flex-wrap: wrap; }
-        .edit-inputs input { width: 100px; margin: 5px; }
+        
+        /* Footer Styling */
+        footer {
+            text-align: center;
+            padding: 25px;
+            background: #fff;
+            border-top: 1px solid #eee;
+            margin-top: 40px;
+        }
+        .footer-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .footer-link:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
@@ -92,7 +103,6 @@
     <div id="work-area" class="work-area">
         <h2 id="tool-title">Tool Name</h2>
         <p id="tool-desc" style="font-size: 14px; color: #666; margin-bottom: 10px;"></p>
-        
         <input type="file" id="file-input">
         
         <div id="translate-options" style="display: none;">
@@ -119,6 +129,11 @@
         <p id="status-msg"></p>
     </div>
 </div>
+
+<footer>
+    <p>Created by <strong>Mr. Guddu Mourya</strong></p>
+    <p>Follow me on Instagram: <a href="https://instagram.com/guddu_mourya_668" target="_blank" class="footer-link">@guddu_mourya_668</a></p>
+</footer>
 
 <script>
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
