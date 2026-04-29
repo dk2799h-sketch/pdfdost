@@ -6,44 +6,71 @@
     <title>PDF Dost - सभी PDF समस्याओं का समाधान</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.8/mammoth.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+
     <style>
         :root { --primary-color: #e5322d; --bg-color: #f8f9fa; --card-bg: #ffffff; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
         body { background-color: var(--bg-color); color: #333; line-height: 1.6; display: flex; flex-direction: column; min-height: 100vh; }
         
         header { 
-            background: #fff; padding: 1.5rem 5%; display: flex; 
-            justify-content: center; align-items: center; 
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; 
+            background: #fff; 
+            padding: 1.5rem 5%; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05); 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000; 
         }
         
-        .logo { font-size: 2.2rem; font-weight: 800; color: var(--primary-color); text-decoration: none; letter-spacing: 1px; }
+        .logo { 
+            font-size: 2.2rem; 
+            font-weight: 800; 
+            color: var(--primary-color); 
+            text-decoration: none; 
+            letter-spacing: 1px;
+        }
 
-        .hero { text-align: center; padding: 40px 20px; background: #fff; border-bottom: 1px solid #eee; }
-        .hero h1 { font-size: 1.8rem; color: #222; }
-
+        .hero { text-align: center; padding: 40px 20px; background: #fff; }
+        
+        /* Landscape Optimization */
         .container { max-width: 1200px; margin: 20px auto; padding: 0 20px; flex: 1; }
+        .tools-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; }
         
-        /* ग्रिड सुधार */
-        .tools-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
-            gap: 20px; 
-        }
-        
-        .tool-card { 
-            background: #fff; padding: 25px; border-radius: 15px; 
-            text-align: center; border: 1px solid #eee; cursor: pointer; 
-            transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.02);
-        }
-        .tool-card:hover { transform: translateY(-5px); border-color: var(--primary-color); box-shadow: 0 10px 20px rgba(0,0,0,0.08); }
-        .tool-card i { font-size: 40px; margin-bottom: 10px; display: block; font-style: normal; }
+        .tool-card { background: #fff; padding: 20px; border-radius: 12px; text-align: center; border: 1px solid #eee; cursor: pointer; transition: 0.3s; }
+        .tool-card:hover { transform: translateY(-5px); border-color: var(--primary-color); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        .tool-icon { font-size: 30px; margin-bottom: 10px; display: block; font-style: normal; }
         
         .work-area { display: none; background: #fff; padding: 30px; border-radius: 20px; text-align: center; border: 2px dashed var(--primary-color); max-width: 600px; margin: 0 auto; }
         .btn { background: var(--primary-color); color: #fff; padding: 12px 25px; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; margin: 10px 5px; }
         
-        footer { text-align: center; padding: 25px; background: #fff; border-top: 1px solid #eee; margin-top: 40px; }
-        .footer-link { color: var(--primary-color); text-decoration: none; font-weight: 600; }
+        /* Footer Styling */
+        footer {
+            background: #fff;
+            text-align: center;
+            padding: 25px;
+            margin-top: 50px;
+            border-top: 1px solid #eee;
+        }
+        .footer-name { font-weight: 800; color: #333; margin-bottom: 5px; }
+        .footer-link { 
+            color: var(--primary-color); 
+            text-decoration: none; 
+            font-weight: 600; 
+            font-size: 0.95rem;
+        }
+        .footer-link:hover { text-decoration: underline; }
+
+        input, select, textarea { display: block; margin: 15px auto; padding: 10px; width: 100%; max-width: 300px; border: 1px solid #ddd; border-radius: 5px; }
     </style>
 </head>
 <body>
@@ -58,13 +85,114 @@
         <div class="tool-card" onclick="openTool('edit')"><i>📝</i><h3>Edit PDF</h3><p>PDF पर टेक्स्ट लिखें</p></div>
         <div class="tool-card" onclick="openTool('watermark')"><i>🏷️</i><h3>Add Watermark</h3><p>वॉटरमार्क लगाएं</p></div>
         <div class="tool-card" onclick="openTool('pagenumbers')"><i>🔢</i><h3>Add Page Numbers</h3><p>पेज नंबर जोड़ें</p></div>
-        </div>
+        <div class="tool-card" onclick="openTool('pdf2excel')"><i>📊</i><h3>PDF to Excel</h3><p>PDF से Excel</p></div>
+        <div class="tool-card" onclick="openTool('pdf2word')"><i>📝</i><h3>PDF to Word</h3><p>PDF से Word</p></div>
+        <div class="tool-card" onclick="openTool('pdf2jpg')"><i>🖼️</i><h3>PDF to JPG</h3><p>PDF से फोटो</p></div>
+        <div class="tool-card" onclick="openTool('html2pdf')"><i>🌐</i><h3>HTML to PDF</h3><p>HTML से PDF</p></div>
+        <div class="tool-card" onclick="openTool('excel2pdf')"><i>📗</i><h3>Excel to PDF</h3><p>Excel से PDF</p></div>
+        <div class="tool-card" onclick="openTool('word2pdf')"><i>📘</i><h3>Word to PDF</h3><p>Word से PDF</p></div>
+        <div class="tool-card" onclick="openTool('scan')"><i>📷</i><h3>Scan to PDF</h3><p>कैमरे से स्कैन</p></div>
+        <div class="tool-card" onclick="openTool('merge')"><i>📂</i><h3>Merge PDF</h3><p>Merge</p></div>
+        <div class="tool-card" onclick="openTool('split')"><i>✂️</i><h3>Split PDF</h3><p>Split</p></div>
+        <div class="tool-card" onclick="openTool('compress')"><i>📉</i><h3>Compress PDF</h3><p>Compress</p></div>
+        <div class="tool-card" onclick="openTool('repair')"><i>🛠️</i><h3>Repair PDF</h3><p>Repair</p></div>
+        <div class="tool-card" onclick="openTool('remove')"><i>🗑️</i><h3>Remove Pages</h3><p>हटाएं</p></div>
+        <div class="tool-card" onclick="openTool('extract')"><i>📄</i><h3>Extract Pages</h3><p>निकालें</p></div>
+        <div class="tool-card" onclick="openTool('organize')"><i>📑</i><h3>Organize PDF</h3><p>व्यवस्थित करें</p></div>
+        <div class="tool-card" onclick="openTool('rotate')"><i>🔄</i><h3>Rotate PDF</h3><p>घुमाएँ</p></div>
+        <div class="tool-card" onclick="openTool('crop')"><i>📐</i><h3>Crop PDF</h3><p>काटें</p></div>
+        <div class="tool-card" onclick="openTool('jpg2pdf')"><i>🖼️</i><h3>JPG to PDF</h3><p>फोटो से PDF</p></div>
+        <div class="tool-card" onclick="openTool('unlock')"><i>🔓</i><h3>Unlock PDF</h3><p>Unlock</p></div>
+        <div class="tool-card" onclick="openTool('protect')"><i>🔒</i><h3>Protect PDF</h3><p>Protect</p></div>
     </div>
 
+    <div id="work-area" class="work-area">
+        <h2 id="tool-title">Tool Name</h2>
+        <p id="tool-desc" style="font-size: 14px; color: #666; margin-bottom: 10px;"></p>
+        <input type="file" id="file-input">
+        <div id="translate-options" style="display: none;">
+            <select id="target-lang">
+                <option value="hi">Hindi (हिंदी)</option>
+                <option value="en">English</option>
+            </select>
+        </div>
+        <div id="edit-inputs-container" style="display:none;">
+            <input type="text" id="edit-text" placeholder="क्या लिखना चाहते हैं?">
+            <div class="edit-inputs">
+                <input type="number" id="edit-x" placeholder="X">
+                <input type="number" id="edit-y" placeholder="Y">
+            </div>
+        </div>
+        <button class="btn" id="action-btn">शुरू करें</button>
+        <br>
+        <button class="btn" style="background:#666" onclick="location.reload()">वापस जाएँ</button>
+        <p id="status-msg"></p>
+    </div>
+</div>
+
 <footer>
-    <p>Created by <strong>Mr. Guddu Mourya</strong></p>
-    <p>Follow me on Instagram: <a href="https://instagram.com/guddu_mourya_668" target="_blank" class="footer-link">@guddu_mourya_668</a></p>
+    <div class="footer-name">Created by Mr. Guddu Mourya</div>
+    <div>
+        Follow me on Instagram: 
+        <a href="https://instagram.com/guddu_mourya_668" target="_blank" class="footer-link">@guddu_mourya_668</a>
+    </div>
 </footer>
 
+<script>
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+
+    async function openTool(mode) {
+        document.getElementById('toolsGrid').style.display = 'none';
+        document.getElementById('hero-section').style.display = 'none';
+        const workArea = document.getElementById('work-area');
+        workArea.style.display = 'block';
+        
+        const title = document.getElementById('tool-title');
+        const fileInput = document.getElementById('file-input');
+        const actionBtn = document.getElementById('action-btn');
+        const transOpt = document.getElementById('translate-options');
+        const editCont = document.getElementById('edit-inputs-container');
+
+        transOpt.style.display = 'none';
+        editCont.style.display = 'none';
+        fileInput.style.display = 'block';
+
+        if(mode === 'translate') {
+            title.innerText = "Translate PDF";
+            fileInput.accept = ".pdf";
+            transOpt.style.display = 'block';
+            actionBtn.onclick = processTranslatePdf;
+        } else if(mode === 'edit') {
+            title.innerText = "Edit PDF";
+            fileInput.accept = ".pdf";
+            editCont.style.display = 'block';
+            actionBtn.onclick = processEditPdf;
+        }
+    }
+
+    function processTranslatePdf() {
+        const fileInput = document.getElementById('file-input');
+        const targetLang = document.getElementById('target-lang').value;
+        const status = document.getElementById('status-msg');
+        if (fileInput.files.length === 0) return alert("PDF फाइल चुनें!");
+        status.innerText = "Redirecting to Google Translate...";
+        const url = `https://translate.google.com/?sl=auto&tl=${targetLang}&op=docs`;
+        setTimeout(() => { window.open(url, '_blank'); }, 1000);
+    }
+
+    async function processEditPdf() {
+        const { PDFDocument, rgb, StandardFonts } = PDFLib;
+        const fileInput = document.getElementById('file-input');
+        const text = document.getElementById('edit-text').value;
+        if (fileInput.files.length === 0 || !text) return alert("जानकारी भरें!");
+        const pdfDoc = await PDFDocument.load(await fileInput.files[0].arrayBuffer());
+        const pages = pdfDoc.getPages();
+        const font = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+        pages[0].drawText(text, { x: 50, y: 50, size: 20, font, color: rgb(0,0,0) });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(new Blob([await pdfDoc.save()], {type:'application/pdf'}));
+        link.download = "Edited_PDF.pdf"; link.click();
+    }
+</script>
 </body>
 </html>
